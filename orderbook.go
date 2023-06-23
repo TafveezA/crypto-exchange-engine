@@ -42,6 +42,10 @@ func NewLimit(price float64) *Limit {
 	}
 }
 
+// func (l *Limit) String() string {
+// 	return fmt.Sprintf("[price: % .2f |volume : %.2f]", l.Price, l.TotalVolume)
+// }
+
 func (l *Limit) AddOrder(o *Order) {
 	o.Limit = l
 	l.Orders = append(l.Orders, o)
@@ -94,11 +98,12 @@ func (ob *Orderbook) add(price float64, o *Order) {
 	}
 	if limit == nil {
 		limit = NewLimit(price)
+		limit.AddOrder(o)
 		if o.Bid {
-			ob.Bids = append(ob.Asks, limit)
+			ob.Bids = append(ob.Bids, limit)
 			ob.BidLimits[price] = limit
 		} else {
-			ob.Asks = append(ob.Bids, limit)
+			ob.Asks = append(ob.Asks, limit)
 			ob.AskLimits[price] = limit
 		}
 	}
